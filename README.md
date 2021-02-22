@@ -1,54 +1,42 @@
-# Title Lint
+# PR Too Big
 
-> Ensure all pull requests follow a standard naming convention
+> Ensure all pull requests are manageable size for review
 
-Following a standard naming convention on Pull Requests.
-
-Useful for linking Jira tickets to Pull Requests or following Conventional Commit messaging.
-
-### Installation
+### Global Installation and Settings
 To Install globally:
 
 ```yaml
 # githaxs_settings/ghx.yml
 
-title-lint:
+pr-too-big:
   # install on all repos
   org: true
+  org_settings:
+    # Final settings cannot be overriden by repo specific settings
+    final:
+      max_changed_files: 10
+      max_additions: 100
+      max_deletions: 100
+    # Default value if final and repo specific settings do not exist
+    default:
+      max_changed_files: 10
+      max_additions: 100
+      max_deletions: 100
   # install on select repos
   repos:
     - api-microservice
-    - websiteservice
+    - website
 ```
 
-Or add a configuration block in the repo itself, see configuration section below.
-
-### Configuration
-
-The following parameters can be set locally or globally:
-- regex
-
-
-To configure global settings:
-
-```yaml
-# githaxs_settings/ghx.yml
-
-title-lint:
-  org_settings:
-    # Cannot be overriden by repo specific settings
-    final:
-      regex: "[A-Z]+-[0-9]+"
-    # Default value if repo specific settings do not exist
-    default:
-      regex: "[A-Z]+-[0-9]+"
-```
+### Local Installation and Settings
 
 To configure repo specific settings:
 ```yaml
 # api-microservice/ghx.yml
 
-title-lint:
+pr-too-big:
   repo_settings:
-    regex: "fix|feat: .*"
+    max_changed_files: 20
+    max_additions: 200
+    max_deletions: 200
 ```

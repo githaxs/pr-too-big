@@ -7,6 +7,8 @@ class Task(BaseTask):
     """
 
     def _execute(self, github_body) -> bool:
+        self.pass_text = ""
+
         return (
             github_body.get("pull_request", {}).get("changed_files", 0)
             <= self.settings.get("max_changed_files", float("inf"))
@@ -15,6 +17,14 @@ class Task(BaseTask):
             and github_body.get("pull_request", {}).get("deletions", 0)
             <= self.settings.get("max_deletions", float("inf"))
         )
+
+    def _requested_action(self, github_body) -> bool:
+        if github_body.get("requested_action").get("identifier") == "override":
+            self.pass_text = "%s has overridden the original result" % github_body.get(
+                "sender"
+            ).get("login")
+            return True
+        return False
 
     def _get_task_name(self):
         return "PR Too Big"
@@ -32,7 +42,13 @@ class Task(BaseTask):
         return ":+1:"
 
     def _get_pass_text(self) -> str:
-        return ""
+        return self.pass_text
 
     def _get_actions(self):
-        return None
+        return [
+            {
+                "label": "Override",
+                "identifier": "override",
+                "description": "Allow exception for PR Too Big",
+            }
+        ]
