@@ -1,5 +1,5 @@
 from base_task import BaseTask
-
+import logging
 
 class Task(BaseTask):
     """
