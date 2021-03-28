@@ -1,8 +1,12 @@
 # PR Too Big
 
-> Ensure all pull requests are manageable size for review
+> Making smaller pull requests is the #1 way to speed up your review time.
 
-### Global Installation and Settings
+[Atlassian](https://www.atlassian.com/blog/git/written-unwritten-guide-pull-requests) and [Small Business Programming](https://smallbusinessprogramming.com/optimal-pull-request-size/) have made the case for using small pull requests to improve team efficiency and reduce errors.
+
+PR Too Big will programatically enforce keeping pull requests small while also providing an override feature.
+
+### Installation
 To Install globally:
 
 ```yaml
@@ -28,9 +32,14 @@ pr-too-big:
     - website
 ```
 
-### Local Installation and Settings
+### Configuration
+|parameter|description|required|default|
+|---|---|---|---|
+|max_changed_files| The maximum number of changed files in a pull request| no | 0 |
+|max_additions| The maximum number of additions in a pull request as calculated by GitHub| no | 0 |
+|max_deletions| The maximum number of deletions in a pull request as calculated by GitHub| no | 0 |
 
-To configure repo specific settings:
+### Example Configuration
 ```yaml
 # api-microservice/ghx.yml
 
