@@ -8,7 +8,7 @@ class Task(MetaTaskInterface):
 
     name = "PR Too Big"
     slug = "pr-too-big"
-    pass_summary = ""
+    pass_text = ""
     fail_text = ""
     fail_summary = "This Pull Request has too many changes."
     actions = [
@@ -20,7 +20,7 @@ class Task(MetaTaskInterface):
     ]
 
     def execute(self, github_body, settings) -> bool:
-        self.pass_text = ""
+        self.pass_summary = ""
 
         # A manual override has been requested
         if (
@@ -30,13 +30,14 @@ class Task(MetaTaskInterface):
             == "override"
         ):
             self.actions = None
-            self.pass_text = "%s has overridden the original result" % github_body.get(
-                "sender"
-            ).get("login")
+            self.pass_summary = (
+                "%s has overridden the original result"
+                % github_body.get("sender").get("login")
+            )
             return True
 
         # Normal use case
-        return (
+        status = (
             github_body.get("pull_request", {}).get("changed_files", 0)
             <= settings.get("max_changed_files", float("inf"))
             and github_body.get("pull_request", {}).get("additions", 0)
@@ -45,10 +46,15 @@ class Task(MetaTaskInterface):
             <= settings.get("max_deletions", float("inf"))
         )
 
-    @property
-    def pass_text(self) -> str:
-        return self._pass_text
+        if status:
+            self.actions = None
 
-    @pass_text.setter
-    def pass_text(self, pass_text):
-        self._pass_text = pass_text
+        return status
+
+    @property
+    def pass_summary(self) -> str:
+        return self._pass_summary
+
+    @pass_summary.setter
+    def pass_summary(self, pass_summary):
+        self._pass_summary = pass_summary
