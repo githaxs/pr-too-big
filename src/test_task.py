@@ -24,7 +24,7 @@ test_cases = [
 
 def test():
     for test_case in test_cases:
-        task = Task(test_case["github_body"])
-        task.settings = test_case["settings"]
+        task = Task()
+        settings = test_case["settings"]
 
-        assert task._execute(test_case["github_body"]) is test_case["expected"]
+        assert task.execute(test_case["github_body"], settings) is test_case["expected"]
