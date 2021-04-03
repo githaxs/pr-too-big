@@ -1,54 +1,54 @@
-from base_task import BaseTask
+from task_interfaces import MetaTaskInterface
 
 
-class Task(BaseTask):
+class Task(MetaTaskInterface):
     """
-    Verifies the Title of a Pull Request matches a provided regex.
+    Checks Pull Requests are manageable for review.
     """
 
-    def _execute(self, github_body) -> bool:
+    name = "PR Too Big"
+    slug = "pr-too-big"
+    pass_summary = ""
+    fail_text = ""
+    fail_summary = "This Pull Request has too many changes."
+    actions = [
+        {
+            "label": "Override",
+            "identifier": "override",
+            "description": "Allow exception for PR Too Big",
+        }
+    ]
+
+    def execute(self, github_body, settings) -> bool:
         self.pass_text = ""
 
-        return (
-            github_body.get("pull_request", {}).get("changed_files", 0)
-            <= self.settings.get("max_changed_files", float("inf"))
-            and github_body.get("pull_request", {}).get("additions", 0)
-            <= self.settings.get("max_additions", float("inf"))
-            and github_body.get("pull_request", {}).get("deletions", 0)
-            <= self.settings.get("max_deletions", float("inf"))
-        )
-
-    def _requested_action(self, github_body) -> bool:
-        if github_body.get("requested_action").get("identifier") == "override":
+        # A manual override has been requested
+        if (
+            github_body.get("githaxs", {}).get("full_event")
+            == "check_run.requested_action"
+            and github_body.get("requested_action", {}).get("identifier", "")
+            == "override"
+        ):
+            self.actions = None
             self.pass_text = "%s has overridden the original result" % github_body.get(
                 "sender"
             ).get("login")
             return True
-        return False
 
-    def _get_task_name(self):
-        return "PR Too Big"
+        # Normal use case
+        return (
+            github_body.get("pull_request", {}).get("changed_files", 0)
+            <= settings.get("max_changed_files", float("inf"))
+            and github_body.get("pull_request", {}).get("additions", 0)
+            <= settings.get("max_additions", float("inf"))
+            and github_body.get("pull_request", {}).get("deletions", 0)
+            <= settings.get("max_deletions", float("inf"))
+        )
 
-    def _get_task_slug(self) -> str:
-        return "pr-too-big"
+    @property
+    def pass_text(self) -> str:
+        return self._pass_text
 
-    def _get_fail_summary(self) -> str:
-        return "This pull request has too many changes."
-
-    def _get_fail_text(self) -> str:
-        return ""
-
-    def _get_pass_summary(self) -> str:
-        return ":+1:"
-
-    def _get_pass_text(self) -> str:
-        return self.pass_text
-
-    def _get_actions(self):
-        return [
-            {
-                "label": "Override",
-                "identifier": "override",
-                "description": "Allow exception for PR Too Big",
-            }
-        ]
+    @pass_text.setter
+    def pass_text(self, pass_text):
+        self._pass_text = pass_text
