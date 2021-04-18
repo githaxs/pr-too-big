@@ -1,4 +1,4 @@
-from task_interfaces import MetaTaskInterface
+from task_interfaces import MetaTaskInterface, SubscriptionLevels
 
 
 class Task(MetaTaskInterface):
@@ -11,6 +11,7 @@ class Task(MetaTaskInterface):
     pass_text = ""
     fail_text = ""
     fail_summary = "This Pull Request has too many changes."
+    subscription_level = SubscriptionLevels.FREE
     actions = [
         {
             "label": "Override",
