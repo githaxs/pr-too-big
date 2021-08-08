@@ -1,7 +1,7 @@
-from task_interfaces import MetaTaskInterface, SubscriptionLevels
+from task_interfaces import TaskInterface, SubscriptionLevels, TaskTypes
 
 
-class Task(MetaTaskInterface):
+class Task(TaskInterface):
     """
     Checks Pull Requests are manageable for review.
     """
@@ -19,6 +19,8 @@ class Task(MetaTaskInterface):
             "description": "Allow exception for PR Too Big",
         }
     ]
+
+    type = TaskTypes.WORKFLOW
 
     def execute(self, github_body, settings) -> bool:
         self.pass_summary = ""
