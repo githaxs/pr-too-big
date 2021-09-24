@@ -1,6 +1,6 @@
 name: PR Too Big
 slug: pr-too-big
-type: meta
+type: content
 summary: Keep Pull Requests manageable so they are easier to review
 description: |
   ## Features
