@@ -1,4 +1,6 @@
-from task_interfaces import TaskInterface, SubscriptionLevels, TaskTypes
+from task_interfaces import SubscriptionLevels
+from task_interfaces import TaskInterface
+from task_interfaces import TaskTypes
 
 
 class Task(TaskInterface):
@@ -42,11 +44,11 @@ class Task(TaskInterface):
         # Normal use case
         status = (
             github_body.get("pull_request", {}).get("changed_files", 0)
-            <= settings.get("max_changed_files", float("inf"))
+            <= int(settings.get("max_changed_files", float("inf")))
             and github_body.get("pull_request", {}).get("additions", 0)
-            <= settings.get("max_additions", float("inf"))
+            <= int(settings.get("max_additions", float("inf")))
             and github_body.get("pull_request", {}).get("deletions", 0)
-            <= settings.get("max_deletions", float("inf"))
+            <= int(settings.get("max_deletions", float("inf")))
         )
 
         if status:
