@@ -3,23 +3,18 @@ slug: pr-too-big
 type: content
 summary: Keep Pull Requests manageable so they are easier to review
 description: |
-  ## Features
-  * Decide what is too big to fail
+  Keep Pull Requests small so they are easier to review
+default_configuration:
+  installation:
+    org: false
 parameters:
   - name: max_changed_files
     description: Maximum number of files that can be changed in a PR
-    required: no
-    sample_value: 20
   - name: max_additions
     description: Maximum number of additions in a PR
-    required: no
-    sample_value: 200
   - name: max_deletions
     description: Maximum number of deletions in a PR
-    required: no
-    sample_value: 200
 subscribed_events:
-  - pull_request.edited
   - pull_request.opened
   - pull_request.reopened
   - pull_request.synchronize
