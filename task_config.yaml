@@ -5,6 +5,7 @@ type: content
 summary: Keep Pull Requests manageable so they are easier to review
 description: |
   Keep Pull Requests small so they are easier to review
+subscription_level: 0
 default_configuration:
   installation:
     org: false
