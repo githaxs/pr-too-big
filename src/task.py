@@ -34,11 +34,11 @@ class Task(WorkflowTask):
         # Normal use case
         status = (
             github_body.get("pull_request", {}).get("changed_files", 0)
-            <= settings.get("max_changed_files", float("inf"))
+            <= (int(settings.get("max_changed_files", "0")) or float("inf"))
             and github_body.get("pull_request", {}).get("additions", 0)
-            <= settings.get("max_additions", float("inf"))
+            <= (int(settings.get("max_additions", "0")) or float("inf"))
             and github_body.get("pull_request", {}).get("deletions", 0)
-            <= settings.get("max_deletions", float("inf"))
+            <= (int(settings.get("max_deletions", "0")) or float("inf"))
         )
 
         if status:
