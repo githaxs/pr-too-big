@@ -1,1 +1,1 @@
-git+https://github.com/githaxs/task-interfaces@v0.0.3
+git+https://github.com/githaxs/task-interfaces@v0.0.8

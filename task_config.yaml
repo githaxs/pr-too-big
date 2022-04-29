@@ -1,3 +1,4 @@
+version: v2
 name: PR Too Big
 slug: pr-too-big
 type: content
